@@ -1,14 +1,14 @@
 import { Schema, model, Types } from "mongoose";
 interface Iblog {
   title: String;
-  author: String;
-  date: String;
+  date: Date;
   content: String;
   tags: [String];
+  createdBy: Types.ObjectId | String;
   comments: [
     {
       author: String;
-      date: String;
+      date: Date;
       content: String;
     }
   ];
@@ -18,11 +18,10 @@ const schema = new Schema<Iblog>({
     type: String,
     required: [true, "title is required"],
   },
-  author: {
-    type: String,
-    required: [true, "author is required"],
+  date: {
+    type: Date,
+    default: new Date(),
   },
-  date: String,
   content: {
     type: String,
     required: [true, "content is required"],
@@ -30,9 +29,19 @@ const schema = new Schema<Iblog>({
   tags: [
     {
       type: String,
+      enum: ["sport", "fashion", "politics", "entertainment"],
     },
   ],
-  comments: [{ author: String, date: String, content: String }],
+  createdBy: {
+    type: Schema.Types.ObjectId,
+  },
+  comments: [
+    {
+      author: String,
+      date: { type: Date, default: new Date() },
+      content: String,
+    },
+  ],
 });
 
 const blogModel = model<Iblog>("Blog", schema);

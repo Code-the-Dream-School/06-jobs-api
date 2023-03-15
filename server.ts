@@ -11,7 +11,7 @@ const DB = process.env.DATABASE?.replace(
 mongoose.set("strictQuery", true);
 
 const start = async () => {
-  const PORT = 8000;
+  const PORT = process.env.PORT || 8000;
 
   await mongoose
     .connect(DB, {
