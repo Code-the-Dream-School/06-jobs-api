@@ -19,9 +19,9 @@ const limiter = rateLimit({
 });
 
 app.use(cors());
+app.use(limiter);
 app.use(helmet());
 app.use(xssClean());
-app.use(limiter);
 app.use(express.json());
 
 app.use("/api/v1/blogs", blogRouter);
