@@ -24,7 +24,7 @@ const Blogs: React.FC = (): JSX.Element => {
     };
     getData();
   }, [token]);
-
+  console.log(data);
   return (
     <div className="blog-post-list-container">
       {data?.map((post) => (

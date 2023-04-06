@@ -46,7 +46,7 @@ export const login = catchAsync(
     );
 
     if (!correctPassword) {
-      return next(customError("wrong password please try again", 404));
+      return next(customError("wrong password please try again", 403));
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_KEY, {

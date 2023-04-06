@@ -20,11 +20,11 @@ const BlogPreview: React.FC<BlogPostPreviewProps> = ({
   ) => {
     e.preventDefault();
     const id = post._id;
-    console.log(id);
     localStorage.setItem("blogId", id);
     navigate("/blog-page");
   };
 
+  console.log(post);
   return (
     <Link to={"/blog-page"} onClick={handleShowBlogPage}>
       <div className="blog-post-preview-container">
