@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 ////
+// const { Request, Response, NextFunction } = require('express');
 const express = require("express");
 const { globalErrorHandler } = require("./errors/error-controller");
 const blogRouter = require("./src/routes/blog-route");

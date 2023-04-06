@@ -12,9 +12,14 @@ export const createBlog = catchAsync(
     });
   }
 );
+
 export const getAllBlogs = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const blogs = await blogModel.find();
+    const blogs = await blogModel
+      .find()
+      .populate("createdBy")
+      .sort({ _id: -1 });
+
     res.status(200).json({
       success: "true",
       blogs,

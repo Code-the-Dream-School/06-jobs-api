@@ -21,7 +21,7 @@ export const signUp = catchAsync(
       name,
     });
     const token = jwt.sign({ id: user._id }, process.env.JWT_KEY, {
-      // expiresIn: process.env.JWT_EXPIRES_IN,
+      expiresIn: process.env.JSONWEBTOKEN_EXPIRES_IN,
     });
 
     res.status(201).json({
@@ -50,7 +50,7 @@ export const login = catchAsync(
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_KEY, {
-      // expiresIn: process.env.JWT_EXPIRES_IN,
+      expiresIn: process.env.JSONWEBTOKEN_EXPIRES_IN,
     });
 
     res.status(201).json({
@@ -64,7 +64,7 @@ export const login = catchAsync(
 export const protect = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     let token;
-
+    console.log(req.headers);
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")

@@ -1,0 +1,61 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  height: 100px;
+  padding: 0 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  max-width: 100%;
+}
+
+.login {
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
+  cursor: pointer;
+  color: rgb(137, 3, 3);
+}
+
+@media only screen and (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .logo,
+  .login {
+    margin-bottom: 20px;
+  }
+}
+.pointer {
+  cursor: pointer;
+  color: rgb(137, 3, 3);
+}
+.search-btn {
+  max-width: 100px;
+}
+.search-container {
+  display: flex;
+  justify-content: space-around;
+  width: 400px;
+}
+.my-blogs {
+  font-size: 2rem;
+  cursor: pointer;
+  font-weight: bolder;
+  color: rgb(137, 3, 3);
+}

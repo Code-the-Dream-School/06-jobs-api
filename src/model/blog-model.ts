@@ -12,6 +12,7 @@ interface Iblog {
       content: String;
     }
   ];
+  imageUrl: String;
 }
 const schema = new Schema<Iblog>({
   title: {
@@ -34,6 +35,7 @@ const schema = new Schema<Iblog>({
   ],
   createdBy: {
     type: Schema.Types.ObjectId,
+    ref: "User",
   },
   comments: [
     {
@@ -42,6 +44,9 @@ const schema = new Schema<Iblog>({
       content: String,
     },
   ],
+  imageUrl: {
+    type: String,
+  },
 });
 
 const blogModel = model<Iblog>("Blog", schema);
