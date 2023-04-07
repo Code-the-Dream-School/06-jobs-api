@@ -114,6 +114,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "jsx": "preserve",
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node"
   }
