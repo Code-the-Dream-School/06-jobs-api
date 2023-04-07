@@ -24,7 +24,7 @@ const BlogPreview: React.FC<BlogPostPreviewProps> = ({
     navigate("/blog-page");
   };
 
-  console.log(post);
+
   return (
     <Link to={"/blog-page"} onClick={handleShowBlogPage}>
       <div className="blog-post-preview-container">

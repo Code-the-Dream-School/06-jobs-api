@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DOMAIN from "../../utils/backend-Domain";
-import AddBlogModal from "../blog-modal/add-blog-modal";
+
 import EditBLogModal from "../edit-blog-modal.tsx/edit-blog-modal";
 import "./blog-post.css";
 interface BlogPostPreviewProps {
@@ -15,6 +16,7 @@ interface BlogPostPreviewProps {
   };
 }
 function BlogPage() {
+  const navigate = useNavigate();
   const blogId = localStorage.getItem("blogId");
   const token = localStorage.getItem("token");
   const [blog, setBlog] = useState<BlogPostPreviewProps["post"]>();
@@ -28,6 +30,13 @@ function BlogPage() {
   function handleCloseModal() {
     setShowModal(false);
   }
+
+  const handleDeleteBlog = async () => {
+    await axios.delete(`${DOMAIN}/blogs/${blogId}`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
+    navigate("/");
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -59,7 +68,9 @@ function BlogPage() {
             <button className="EditButton" onClick={handleShowBlog}>
               Edit
             </button>
-            <button className="DeleteButton">Delete</button>
+            <button className="DeleteButton" onClick={handleDeleteBlog}>
+              Delete
+            </button>
           </div>
         </div>
       </div>

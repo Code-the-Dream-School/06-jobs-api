@@ -6,17 +6,7 @@ import { useState } from "react";
 import AddBlogModal from "../blog-modal/add-blog-modal";
 
 const Nav = () => {
-  // const [searchQuery, setSearchQuery] = useState();
-
-  // const handleSearch = (event: any) => {
-  //   setSearchQuery(event.target.value);
-  // };
-
-  // const handleSubmit = (event: any) => {
-  //   event.preventDefault();
-  //   // Perform search with searchQuery
-  //   console.log(`Search for ${searchQuery}`);
-  // };
+ 
 
   const [showModal, setShowModal] = useState(false);
 
