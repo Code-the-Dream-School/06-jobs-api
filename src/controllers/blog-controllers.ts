@@ -39,7 +39,10 @@ export const getMyBlogs = catchAsync(
 export const getOneBlog = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { _id: id } = req.userModel;
-    const blog = await blogModel.findOne({ createdBy: id, _id: req.params.id });
+    const blog = await blogModel
+      .findOne({ createdBy: id, _id: req.params.id })
+      .populate("createdBy");
+
     if (!blog) {
       return next(customError("there is no blog found", 404));
     }
@@ -52,14 +55,12 @@ export const getOneBlog = catchAsync(
 export const updateBlog = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { _id: id } = req.userModel;
-    const blog = await blogModel.findOneAndUpdate(
-      { createdBy: id, _id: req.params.id },
-      req.body,
-      {
+    const blog = await blogModel
+      .findOneAndUpdate({ createdBy: id, _id: req.params.id }, req.body, {
         new: true,
         runValidators: true,
-      }
-    );
+      })
+      .populate("createdBy");
     if (!blog) {
       return next(customError("there is no blog found", 404));
     }
