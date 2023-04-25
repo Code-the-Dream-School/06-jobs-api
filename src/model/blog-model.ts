@@ -39,7 +39,7 @@ const schema = new Schema<Iblog>({
   },
   comments: [
     {
-      author: String,
+      author: { name: String },
       date: { type: Date, default: new Date() },
       content: String,
     },

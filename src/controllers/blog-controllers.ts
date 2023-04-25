@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import catchAsync from "../../utils/catch-async";
 import { customError } from "../../errors/error";
 import blogModel from "../../src/model/blog-model";
+import User from "../../src/model/user-model";
 
 export const createBlog = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -71,7 +72,9 @@ export const updateBlog = catchAsync(
 );
 export const addComment = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    req.body.author = req.userModel._id;
+    const user = await User.findOne({ _id: req.userModel._id });
+    req.body.author = user;
+
     const blog = await blogModel.findOneAndUpdate(
       { _id: req.params.id },
       { $push: { comments: req.body } },
