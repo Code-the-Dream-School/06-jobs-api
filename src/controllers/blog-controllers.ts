@@ -40,7 +40,7 @@ export const getOneBlog = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { _id: id } = req.userModel;
     const blog = await blogModel
-      .findOne({ createdBy: id, _id: req.params.id })
+      .findOne({ _id: req.params.id })
       .populate("createdBy");
 
     if (!blog) {
