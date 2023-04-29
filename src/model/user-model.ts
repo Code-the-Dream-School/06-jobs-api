@@ -1,5 +1,6 @@
 import { Schema, model, Types } from "mongoose";
 const bcrypt = require("bcryptjs");
+const validator = require("validator");
 
 interface Iuser {
   name: string;
@@ -9,9 +10,14 @@ interface Iuser {
   correctPassword: (candidatePassword: string, password: string) => any;
 }
 const schema = new Schema<Iuser>({
-  name: String,
-  email: String,
-  password: String,
+  name: { type: String, required: [true, "name is required"] },
+  email: {
+    type: String,
+    required: [true, "email is required"],
+    unique: true,
+    validate: [validator.isEmail, "please use a valid email address"],
+  },
+  password: { type: String, required: true },
   createdAt: {
     type: Date,
     default: Date.now(),

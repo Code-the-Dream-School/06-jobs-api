@@ -30,7 +30,11 @@ const schema = new Schema<Iblog>({
   tags: [
     {
       type: String,
-      enum: ["sport", "fashion", "politics", "entertainment"],
+      enum: {
+        values: ["sport", "fashion", "politics", "entertainment"],
+        message:
+          "a tag can only have sport, fashion, politics or entertainment",
+      },
     },
   ],
   createdBy: {
