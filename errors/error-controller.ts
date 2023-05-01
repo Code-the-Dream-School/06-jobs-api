@@ -54,7 +54,6 @@ exports.globalErrorHandler = (
   if (process.env.NODE_ENV === "production") {
     sendErrorProd(err, res);
   } else if (process.env.NODE_ENV === "development") {
-    console.log("hell0");
     let error = { ...err };
     if (err.name === "CastError") error = handleCastErrorDb(error);
     if (error.code === 11000) error = handleDuplicateKeyDb(error);

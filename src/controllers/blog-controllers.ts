@@ -3,6 +3,8 @@ import catchAsync from "../../utils/catch-async";
 import { customError } from "../../errors/error";
 import blogModel from "../../src/model/blog-model";
 import User from "../../src/model/user-model";
+import { ParsedQs } from "qs";
+import userModel from "../../src/model/user-model";
 
 export const createBlog = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -16,11 +18,22 @@ export const createBlog = catchAsync(
 
 export const getAllBlogs = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const blogs = await blogModel
-      .find()
+    const { title } = req.query;
+    const queryObject: any = {};
+    if (title) {
+      queryObject.title = { $regex: title, $options: "i" };
+    }
+    let results = blogModel
+      .find(queryObject)
       .populate("createdBy")
       .sort({ _id: -1 });
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 9;
+    const skip = (page - 1) * limit;
 
+    results = results.skip(skip).limit(limit);
+
+    const blogs = await results;
     res.status(200).json({
       success: "true",
       blogs,
@@ -29,14 +42,32 @@ export const getAllBlogs = catchAsync(
 );
 export const getMyBlogs = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { _id: id } = req.userModel;
-    const blogs = await blogModel.find({ createdBy: id });
+    const { _id } = req.userModel;
+    const { title } = req.query;
+    const queryObject: any = {
+      createdBy: _id,
+    };
+    if (title) {
+      queryObject.title = { $regex: title, $options: "i" };
+    }
+    let results = blogModel
+      .find(queryObject)
+      .populate("createdBy")
+      .sort({ _id: -1 });
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 9;
+    const skip = (page - 1) * limit;
+
+    results = results.skip(skip).limit(limit);
+
+    const blogs = await results;
     res.status(200).json({
       success: "true",
       blogs,
     });
   }
 );
+
 export const getOneBlog = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const blog = await blogModel
@@ -107,3 +138,4 @@ export const deleteBlog = catchAsync(
     });
   }
 );
+//
