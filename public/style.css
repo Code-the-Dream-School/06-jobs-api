@@ -68,7 +68,7 @@ hr {
 }
 
 #jobs-table th, #jobs-table td {
-    padding : 1rem;
+    padding : 0.5rem;
     text-align : left;
     border-bottom : 1px solid #CCCCCC;
 }
@@ -80,3 +80,46 @@ hr {
 #jobs-table-header th:last-child, #jobs-table td:last-child {
     text-align : end;
 }
+
+@media screen and (max-width: 800px) {
+    h1 {
+        font-size: 25px;
+    }
+
+    form {
+       flex-direction: row;
+       flex-wrap: wrap;
+    }
+    input {
+       margin-right: 0;
+       padding: 8px;
+    }
+    #jobs-table {
+        overflow-x: auto;
+        width: 100%;
+     }
+     #jobs-table th, #jobs-table td {
+        width: auto;
+     }
+ }
+
+ @media screen and (max-width: 400px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    button {
+        font-size : 15px;
+        padding : 5px 15px;
+        margin-top : 7px;
+    }
+
+    #jobs-table th, #jobs-table td, #jobs-table-header {
+        font-size: 13px;
+    }
+
+    .deleteButton, .editButton {
+        font-size: 10px;
+        padding : 4px 8px;
+    }
+ }
