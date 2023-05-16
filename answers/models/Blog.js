@@ -19,7 +19,7 @@ const BlogSchema = mongoose.Schema({
   writtenBy: {
     type: String,
     // default the blog owner
-    // default: createdBy,
+    // default: this.createdBy,
     required: [true, 'Please provide blog writer'],
   },
   blogPost: {
