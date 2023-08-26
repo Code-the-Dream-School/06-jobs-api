@@ -15,6 +15,19 @@ const teamSchema = new mongoose.Schema({
         type:String,
         enum: ['Winning Franchise', 'Losing Franchise', 'Struggling Playoff Team']
     },
+    yearFounded: {
+        type: Number, // Add this line to specify the number type
+        required: [true, 'Please provide the year founded']
+    },
+    teamOwner: {
+        type:String,
+        required: [true, 'Please provide team Owner' ]
+    },
+
+    championshipYears: {
+        type: [Number, String],
+        required: [true, "Please provide championship years, if none use N/A"]
+    },
 
     createdBy: {
         type: mongoose.Types.ObjectId,
