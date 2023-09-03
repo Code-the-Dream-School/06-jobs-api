@@ -1,5 +1,5 @@
 // Require dotenv with file path (including hidden file notation)
-require('dotenv').config({ path: './06-jobs-api/.env' });
+require('dotenv').config({ path: './.env' });
 require("express-async-errors");
 const helmet = require("helmet");
 const cors = require("cors");
