@@ -58,14 +58,15 @@ const updateTeam = async (req, res) => {
 
 const deleteTeam = async (req, res) => {
   const {
-    user: { userId },
+    user: { name, userId },
     params: { id: teamId },
   } = req;
+  
   const team = await Team.findByIdAndRemove({ _id: teamId, createdBy: userId });
   if (!team) {
     throw new NotFoundError(`No team found with id ${teamId}`);
   }
-  res.status(StatusCodes.OK).send(`${teamId} has been deleted from ${userId} database`);
+  res.status(StatusCodes.OK).send(`${teamId} has been deleted from ${name}'s database`);
 };
 
 module.exports = {
