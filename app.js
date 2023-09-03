@@ -1,4 +1,5 @@
-require("dotenv").config();
+import dotenv from 'dotenv';
+dotenv.config();
 require("express-async-errors");
 const helmet = require("helmet");
 const cors = require("cors");
