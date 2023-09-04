@@ -9,8 +9,8 @@ const express = require("express");
 const app = express();
 
 // error handler
-const notFoundMiddleware = require("./middleware/not-found");
-const errorHandlerMiddleware = require("./middleware/error-handler");
+const notFoundMiddleware = require("../middleware/not-found");
+const errorHandlerMiddleware = require("../middleware/error-handler");
 
 app.use(express.json());
 // extra packages
