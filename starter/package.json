@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "build": "npm install && npm run build",
     "start": "nodemon app.js"
   },
   "author": "",
@@ -28,7 +29,7 @@
     "yamljs": "^0.3.0"
   },
   "engines": {
-    "node": "14.17.0"
+    "node": "18.16.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.9",
