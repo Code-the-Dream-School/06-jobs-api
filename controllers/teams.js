@@ -1,7 +1,7 @@
-const Team = require("../starter/models/teams");
+const Team = require("../models/teams");
 const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, NotFoundError } = require("../starter/errors");
-const teams = require("../starter/models/teams");
+const { BadRequestError, NotFoundError } = require("../errors");
+const teams = require("../models/teams");
 
 const getAllTeams = async (req, res) => {
   const teams = await Team.find({ createdBy: req.user.userId }).sort(
