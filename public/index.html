@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Teams</title>
+</head>
+
+<body>
+    <h1>NBA Franchises</h1>
+    <button type="button" id="logoff" style="display:none;">logoff</button>
+    <hr>
+    <p id="message"></p>
+    <hr>
+    <div id="logon-register" style="display:none;">
+        <button type="button" id="logon">logon</button>
+        <button type="button" id="register">register</button>
+    </div>
+    <div id="logon-div" style="display:none;">
+        <form>
+            <div>
+                <label for="email">email:</label>
+                <input type="email" id="email">
+            </div>
+            <div>
+                <label for="password">password:</label>
+                <input type="password" id="password">
+            </div>
+            <button type="button" id="logon-button">logon</button>
+            <button type="button" id="logon-cancel">cancel</button>
+        </form>
+    </div>
+    <div id="register-div" style="display:none;">
+        <form>
+            <div>
+                <label for="name">name:</label>
+                <input type="text" id="name">
+            </div>
+            <div>
+                <label for="email1">email:</label>
+                <input type="email" id="email1">
+            </div>
+            <div>
+                <label for="password1">password:</label>
+                <input type="password" id="password1">
+            </div>
+            <div>
+                <label for="password2">verify password:</label>
+                <input type="password" id="password2">
+            </div>
+            <button type="button" id="register-button">register</button>
+            <button type="button" id="register-cancel">cancel</button>
+        </form>
+    </div>
+    <div id="Teams" style="display:none;">
+        <p id="Teams"></p>
+        <table id="Teams" style="display:none;">
+            <tr id="Teams-header">
+                <th>Franchise</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Team Owner</th>
+                <th>Championship Year</th>
+                <th colspan="2"></th>
+            </tr>
+        </table>
+        <button type="button" id="add-team">Add Teams</button>
+    </div>
+    <div id="edit-team" style="display:none;">
+        <form>
+            <div>
+                <label for="Franchise">Franchise:</label>
+                <input type="text" id="Franchise">
+            </div>
+            <div>
+                <label for="Location">Location:</label>
+                <input type="text" id="Location">
+            </div>
+            <div>
+                <label for="Status">Status:</label>
+                <select id="Status">
+                    <option value="Winning Franchise">Winning Franchise</option>
+                    <option value="Losing Franchise">Losing Franchise</option>
+                    <option value="Struglging Playoff Team">Struglging Playoff Team</option>
+                </select>
+            </div>
+            <button type="button" id="adding-team">add</button>
+            <button type="button" id="edit-cancel">cancel</button>
+        </form>
+    </div>
+    <script src="./Teams.js"></script>
+</body>
+</html>

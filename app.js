@@ -18,6 +18,7 @@ const teamsRouter = require('./routes/teams')
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
+app.use(express.static('public'));
 app.use(express.json());
 // extra packages
 
