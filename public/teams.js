@@ -16,9 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const password2 = document.getElementById("password2");
   const registerButton = document.getElementById("register-button");
   const registerCancel = document.getElementById("register-cancel");
-  const team = document.getElementById("team");
+  const team = document.getElementById("teams");
   const teamTable = document.getElementById("team-table");
-  const teamTableHeader = document.getElementById("team-table-header");
+  const teamTableHeader = document.getElementById("team-header");
   const addTeam = document.getElementById("add-team");
   const editTeam = document.getElementById("edit-team");
   const franchise = document.getElementById("Franchise");
@@ -82,10 +82,10 @@ async function buildteamTable(teamTable, teamTableHeader, token, message) {
           message
         );
         if (count > 0) {
-          teamMessage.textContent = "";
+          message.textContent = "";
           teamTable.style.display = "block";
         } else {
-          teamMessage.textContent = "There are no teams to display for this user.";
+          message.textContent = "There are no teams to display for this user.";
           teamTable.style.display = "none";
         }
         team.style.display = "block";
@@ -114,6 +114,7 @@ async function buildteamTable(teamTable, teamTableHeader, token, message) {
         showing.style.display = "none";
         logonRegister.style.display = "block";
         showing = logonRegister;
+        console.log(teamTable);
         teamTable.replaceChildren(teamTableHeader); // don't want other users to see
         message.textContent = "You are logged off.";
       } else if (e.target === logon) {
