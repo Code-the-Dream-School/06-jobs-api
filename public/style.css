@@ -1,0 +1,108 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #8d8d8d;
+    padding: 20px;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    font-size: 36px;
+    color: #E53935; /* Red color */
+}
+
+hr {
+    border: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+button {
+    background-color: #E53935;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #322fd3;
+}
+
+button#logoff {
+    float: right;
+    display: block;
+}
+
+button#add-team {
+    margin-top: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+#teams {
+    margin-top: 20px;
+}
+
+#edit-team {
+    margin-top: 20px;
+}
+
+#edit-team form div {
+    margin-bottom: 10px;
+}
+
+#edit-team form select {
+    width: 100%;
+    padding: 10px;
+}
+
+#edit-team form input {
+    width: 100%;
+    padding: 10px;
+}
+
+/* Add basketball-related background and styling */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: url('basketball.jpg') no-repeat center center fixed; /* Replace 'basketball.jpg' with your image file */
+    background-size: cover;
+    opacity: 0.1;
+}
+
+#teams, #edit-team {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Additional styles for responsiveness */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 576px) {
+    button {
+        width: 100%;
+    }
+}
