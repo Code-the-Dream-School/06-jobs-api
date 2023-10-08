@@ -57,19 +57,19 @@
     </div>
     <div id="teams" style="display:none;">
         <p id="team-message"></p>
-        <table id="team-table" style="display:none;">
+        <table id="team-table" style="display:block;">
             <tr id="team-header">
                 <th>Franchise</th>
                 <th>Location</th>
                 <th>Status</th>
                 <th>Team Owner</th>
-                <th>Championship Year</th>
+                <th>Championship Years</th>
                 <th colspan="2"></th>
             </tr>
         </table>
         <button type="button" id="add-team">Add Teams</button>
     </div>
-    <div id="edit-team" style="display:none;">
+    <div id="edit-team" style="display:block;">
         <form>
             <div>
                 <label for="Franchise">Franchise:</label>
@@ -78,6 +78,15 @@
             <div>
                 <label for="Location">Location:</label>
                 <input type="text" id="Location">
+            </div>
+            <div>
+                <label for="Team Owner"> Team Owner: </label>
+                <input type = "text" id = "Team Owner">
+            </div>
+            <div>
+                <label for="Championship Years"> Championship Years: 
+                    <input type = "text" id = "Championship Years">
+                </label>
             </div>
             <div>
                 <label for="Status">Status:</label>

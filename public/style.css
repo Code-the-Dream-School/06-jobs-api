@@ -8,7 +8,7 @@ body {
 h1 {
     text-align: center;
     font-size: 36px;
-    color: #E53935; /* Red color */
+    color: #E53935; 
 }
 
 hr {
@@ -73,7 +73,6 @@ th, td {
     padding: 10px;
 }
 
-/* Add basketball-related background and styling */
 body::before {
     content: "";
     position: fixed;
@@ -82,7 +81,7 @@ body::before {
     width: 100%;
     height: 100%;
     z-index: -1;
-    background: url('basketball.jpg') no-repeat center center fixed; /* Replace 'basketball.jpg' with your image file */
+    background: url('https://cdn.nba.com/manage/2021/10/GettyImages-1228132003.png') no-repeat center center fixed; /* Replace 'basketball.jpg' with your image file */
     background-size: cover;
     opacity: 0.1;
 }

@@ -17,7 +17,7 @@ const teamSchema = new mongoose.Schema({
     },
     yearFounded: {
         type: Number, // Add this line to specify the number type
-        required: [true, 'Please provide the year founded']
+        required: [false, 'Please provide the year founded']
     },
     teamOwner: {
         type:String,
@@ -25,7 +25,7 @@ const teamSchema = new mongoose.Schema({
     },
 
     championshipYears: {
-        type: [Number, String],
+        type: [Number || String],
         required: [true, "Please provide championship years, if none use N/A"]
     },
 

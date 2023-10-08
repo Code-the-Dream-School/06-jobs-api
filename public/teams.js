@@ -24,140 +24,178 @@ document.addEventListener("DOMContentLoaded", () => {
   const franchise = document.getElementById("Franchise");
   const location = document.getElementById("Location");
   const status = document.getElementById("Status");
+  const teamOwner = document.getElementById("Team Owner");
+  const championshipYears = document.getElementById("Championship Years");
   const addingTeam = document.getElementById("adding-team");
   const teamMessage = document.getElementById("team-message");
   const editCancel = document.getElementById("edit-cancel");
 
-async function buildteamTable(teamTable, teamTableHeader, token, message) {
-  try {
-    const response = await fetch("/api/v1/teams", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await response.json();
-    var children = [teamTableHeader];
-    if (response.status === 200) {
-      if (data.count === 0) {
-        teamTable.replaceChildren(...children); // clear this for safety
-        return 0;
-      } else {
-        for (let i = 0; i < data.team.length; i++) {
-          let editButton = `<td><button type="button" class="editButton" data-id=${data.team[i]._id}>edit</button></td>`;
-          let deleteButton = `<td><button type="button" class="deleteButton" data-id=${data.team[i]._id}>delete</button></td>`;
-          let rowHTML = `<td>${data.team[i].franchise}</td><td>${data.team[i].location}</td><td>${data.team[i].status}</td>${editButton}${deleteButton}`;
-          let rowEntry = document.createElement("tr");
-          rowEntry.innerHTML = rowHTML;
-          children.push(rowEntry);
+  async function buildteamTable(teamTable, teamTableHeader, token, message) {
+    try {
+      const response = await fetch("/api/v1/teams", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      var children = [teamTableHeader];
+      if (response.status === 200) {
+        if (data.count === 0) {
+          teamTable.replaceChildren(...children); // clear this for safety
+          return 0;
+        } else {
+          for (let i = 0; i < data.team.length; i++) {
+            let editButton = `<td><button type="button" class="editButton" data-id=${data.team[i]._id}>edit</button></td>`;
+            let deleteButton = `<td><button type="button" class="deleteButton" data-id=${data.team[i]._id}>delete</button></td>`;
+            let rowHTML = `<td>${data.team[i].franchise}</td><td>${data.team[i].location}</td><td>${data.team[i].status}</td><td>${data.team[i].teamOwner}</td><td>${data.team[i].championshipYears}</td>${editButton}${deleteButton}`;
+            let rowEntry = document.createElement("tr");
+            rowEntry.innerHTML = rowHTML;
+            children.push(rowEntry);
+          }
+          teamTable.replaceChildren(...children);
         }
-        teamTable.replaceChildren(...children);
+        return data.count;
+      } else {
+        message.textContent = data.msg;
+        return 0;
       }
-      return data.count;
-    } else {
-      message.textContent = data.msg;
+    } catch (err) {
+      message.textContent = "A communication error occurred.";
       return 0;
     }
-  } catch (err) {
-    message.textContent = "A communication error occurred.";
-    return 0;
   }
-}
 
-    // section 2 
+  // section 2
 
-    let showing = logonRegister;
-    let token = null;
-    document.addEventListener("startDisplay", async () => {
-      showing = logonRegister;
-      token = localStorage.getItem("token");
-      if (token) {
-        //if the user is logged in
-        logoff.style.display = "block";
-        const count = await buildteamTable(
-          teamTable,
-          teamTableHeader,
-          token,
-          message
-        );
-        if (count > 0) {
-          message.textContent = "";
-          teamTable.style.display = "block";
-        } else {
-          message.textContent = "There are no teams to display for this user.";
-          teamTable.style.display = "none";
-        }
-        team.style.display = "block";
-        showing = team;
-      } else {
-        logonRegister.style.display = "block";
-      }
-    });
-  
-    var thisEvent = new Event("startDisplay");
-    document.dispatchEvent(thisEvent);
-    var suspendInput = false;
-  
-    // section 3
-
-    document.addEventListener("click", async (e) => {
-      if (suspendInput) {
-        return; // we don't want to act on buttons while doing async operations
-      }
-      if (e.target.nodeName === "BUTTON") {
+  let showing = logonRegister;
+  let token = null;
+  document.addEventListener("startDisplay", async () => {
+    showing = logonRegister;
+    token = localStorage.getItem("token");
+    if (token) {
+      //if the user is logged in
+      logoff.style.display = "block";
+      const count = await buildteamTable(
+        teamTable,
+        teamTableHeader,
+        token,
+        message,
+      );
+      if (count > 0) {
         message.textContent = "";
+        teamTable.style.display = "block";
+      } else {
+        message.textContent = "There are no teams to display for this user.";
+        teamTable.style.display = "none";
       }
-      if (e.target === logoff) {
-        localStorage.removeItem("token");
-        token = null;
-        showing.style.display = "none";
-        logonRegister.style.display = "block";
-        showing = logonRegister;
-        console.log(teamTable);
-        teamTable.replaceChildren(teamTableHeader); // don't want other users to see
-        message.textContent = "You are logged off.";
-      } else if (e.target === logon) {
-        showing.style.display = "none";
-        logonDiv.style.display = "block";
-        showing = logonDiv;
-      } else if (e.target === register) {
-        showing.style.display = "none";
-        registerDiv.style.display = "block";
-        showing = registerDiv;
-      } else if (e.target === logonCancel || e.target == registerCancel) {
-        showing.style.display = "none";
-        logonRegister.style.display = "block";
-        showing = logonRegister;
-        email.value = "";
-        password.value = "";
-        name.value = "";
-        email1.value = "";
-        password1.value = "";
-        password2.value = "";
-      } else if (e.target === logonButton) {
+      team.style.display = "";
+      showing = team;
+    } else {
+      logonRegister.style.display = "block";
+    }
+  });
+
+  var thisEvent = new Event("startDisplay");
+  document.dispatchEvent(thisEvent);
+  var suspendInput = false;
+
+  // section 3
+
+  document.addEventListener("click", async (e) => {
+    if (suspendInput) {
+      return; // we don't want to act on buttons while doing async operations
+    }
+    if (e.target.nodeName === "BUTTON") {
+      message.textContent = "";
+    }
+    if (e.target === logoff) {
+      localStorage.removeItem("token");
+      token = null;
+      showing.style.display = "none";
+      logonRegister.style.display = "block";
+      showing = logonRegister;
+      console.log(teamTable);
+      teamTable.replaceChildren(teamTableHeader); // don't want other users to see
+      message.textContent = "You are logged off.";
+    } else if (e.target === logon) {
+      showing.style.display = "none";
+      logonDiv.style.display = "block";
+      showing = logonDiv;
+    } else if (e.target === register) {
+      showing.style.display = "none";
+      registerDiv.style.display = "block";
+      showing = registerDiv;
+    } else if (e.target === logonCancel || e.target == registerCancel) {
+      showing.style.display = "none";
+      logonRegister.style.display = "block";
+      showing = logonRegister;
+      email.value = "";
+      password.value = "";
+      name.value = "";
+      email1.value = "";
+      password1.value = "";
+      password2.value = "";
+    } else if (e.target === logonButton) {
+      suspendInput = true;
+      try {
+        const response = await fetch("/api/v1/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.value,
+            password: password.value,
+          }),
+        });
+        const data = await response.json();
+        if (response.status === 200) {
+          message.textContent = `Logon successful.  Welcome ${data.user.name}`;
+          token = data.token;
+          localStorage.setItem("token", token);
+          showing.style.display = "none";
+          thisEvent = new Event("startDisplay");
+          email.value = "";
+          password.value = "";
+          document.dispatchEvent(thisEvent);
+        } else {
+          message.textContent = data.msg;
+        }
+      } catch (err) {
+        message.textContent = "A communications error occurred.";
+      }
+      suspendInput = false;
+    } else if (e.target === registerButton) {
+      if (password1.value != password2.value) {
+        message.textContent = "The passwords entered do not match.";
+      } else {
         suspendInput = true;
         try {
-          const response = await fetch("/api/v1/auth/login", {
+          const response = await fetch("/api/v1/auth/register", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              email: email.value,
-              password: password.value,
+              name: name.value,
+              email: email1.value,
+              password: password1.value,
             }),
           });
           const data = await response.json();
-          if (response.status === 200) {
-            message.textContent = `Logon successful.  Welcome ${data.user.name}`;
+          if (response.status === 201) {
+            message.textContent = `Registration successful.  Welcome ${data.user.name}`;
             token = data.token;
             localStorage.setItem("token", token);
             showing.style.display = "none";
             thisEvent = new Event("startDisplay");
-            email.value = "";
-            password.value = "";
             document.dispatchEvent(thisEvent);
+            name.value = "";
+            email1.value = "";
+            password1.value = "";
+            password2.value = "";
           } else {
             message.textContent = data.msg;
           }
@@ -165,45 +203,9 @@ async function buildteamTable(teamTable, teamTableHeader, token, message) {
           message.textContent = "A communications error occurred.";
         }
         suspendInput = false;
-      } else if (e.target === registerButton) {
-        if (password1.value != password2.value) {
-          message.textContent = "The passwords entered do not match.";
-        } else {
-          suspendInput = true;
-          try {
-            const response = await fetch("/api/v1/auth/register", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                name: name.value,
-                email: email1.value,
-                password: password1.value,
-              }),
-            });
-            const data = await response.json();
-            if (response.status === 201) {
-              message.textContent = `Registration successful.  Welcome ${data.user.name}`;
-              token = data.token;
-              localStorage.setItem("token", token);
-              showing.style.display = "none";
-              thisEvent = new Event("startDisplay");
-              document.dispatchEvent(thisEvent);
-              name.value = "";
-              email1.value = "";
-              password1.value = "";
-              password2.value = "";
-            } else {
-              message.textContent = data.msg;
-            }
-          } catch (err) {
-            message.textContent = "A communications error occurred.";
-          }
-          suspendInput = false;
-        }
-      } //Section 4
-      else if (e.target === addTeam) {
+      }
+    } //Section 4
+    else if (e.target === addTeam) {
       showing.style.display = "none";
       editTeam.style.display = "block";
       showing = editTeam;
@@ -211,16 +213,19 @@ async function buildteamTable(teamTable, teamTableHeader, token, message) {
       franchise.value = "";
       location.value = "";
       status.value = "pending";
+      teamOwner.value = "";
+      championshipYears.value = "";
       addingTeam.textContent = "add";
     } else if (e.target === editCancel) {
       showing.style.display = "none";
       franchise.value = "";
       location.value = "";
       status.value = "pending";
+      teamOwner.value = "";
+      // championshipYears.value = "";
       thisEvent = new Event("startDisplay");
       document.dispatchEvent(thisEvent);
     } else if (e.target === addingTeam) {
-
       if (!editTeam.dataset.id) {
         // this is an attempted add
         suspendInput = true;
@@ -235,18 +240,22 @@ async function buildteamTable(teamTable, teamTableHeader, token, message) {
               franchise: franchise.value,
               location: location.value,
               status: status.value,
+              teamOwner: teamOwner.value,
+              championshipYears: championshipYears.value
             }),
           });
           const data = await response.json();
           if (response.status === 201) {
             //successful create
             message.textContent = "The team entry was created.";
-            showing.style.display = "none";
+            showing.style.display = "";
             thisEvent = new Event("startDisplay");
             document.dispatchEvent(thisEvent);
             franchise.value = "";
             location.value = "";
             status.value = "pending";
+             teamOwner.value;
+             championshipYears.value;
           } else {
             // failure
             message.textContent = data.msg;
@@ -270,6 +279,8 @@ async function buildteamTable(teamTable, teamTableHeader, token, message) {
               franchise: franchise.value,
               location: location.value,
               status: status.value,
+              teamOwner: teamOwner.value,
+              championshipYears: championshipYears.value,
             }),
           });
           const data = await response.json();
@@ -279,19 +290,19 @@ async function buildteamTable(teamTable, teamTableHeader, token, message) {
             franchise.value = "";
             location.value = "";
             status.value = "pending";
+            teamOwner.value;
+            championshipYears.value;
             thisEvent = new Event("startDisplay");
             document.dispatchEvent(thisEvent);
           } else {
             message.textContent = data.msg;
           }
         } catch (err) {
-
           message.textContent = "A communication error occurred.";
         }
       }
       suspendInput = false;
     } // section 5
-
     else if (e.target.classList.contains("editButton")) {
       editTeam.dataset.id = e.target.dataset.id;
       suspendInput = true;

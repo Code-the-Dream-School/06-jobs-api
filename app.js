@@ -7,12 +7,15 @@ const rateLimiter = require("express-rate-limit");
 const express = require("express");
 const app = express();
 
-const connectDB = require('./db/connect')
-const authenticateUser = require('./middleware/authentication')
+
+
+
+const connectDB = require('./db/connect');
+const authenticateUser = require('./middleware/authentication');
 
 //routers
-const authRouter = require('./routes/auth')
-const teamsRouter = require('./routes/teams')
+const authRouter = require('./routes/auth');
+const teamsRouter = require('./routes/teams');
 
 // error handler
 const notFoundMiddleware = require("./middleware/not-found");
@@ -25,6 +28,7 @@ app.use(express.json());
 // routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/teams', authenticateUser, teamsRouter);
+
 
 
 app.set('trust proxy', 1);
