@@ -1,27 +1,29 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const RecipeSchema = new mongoose.Schema({
-    recipe:{
-        type:String,
-        required:[true, 'Please provide recipe name'],
-        maxlength:50
+const RecipeSchema = new mongoose.Schema(
+  {
+    recipe: {
+      type: String,
+      required: [true, "Please provide recipe name"],
+      maxlength: 50,
     },
-    ingredients:{
-        type:String,
-        required:[true, 'Please provide ingredients'],
-        maxlength:500
+    ingredients: {
+      type: String,
+      required: [true, "Please provide ingredients"],
+      maxlength: 500,
     },
     status: {
-        type:String,
-        enum: ['interview', 'declined', 'pending'],
-        default: 'pending',
+      type: String,
+      enum: ["interview", "declined", "pending"],
+      default: "pending",
     },
-    createdBy:{
-        type:mongoose.Types.ObjectId,
-        ref: 'User',
-        required:[true, 'Please provide user']
-    }
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: [true, "Please provide user"],
+    },
+  },
+  { timestamps: true }
+);
 
-},{timestamps:true})
-
-module.exports = mongoose.model('Recipe', RecipeSchema)
+module.exports = mongoose.model("Recipe", RecipeSchema);
