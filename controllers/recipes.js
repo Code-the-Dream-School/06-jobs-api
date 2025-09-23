@@ -43,7 +43,7 @@ const createRecipe = async (req, res) => {
 // UPDATE RECIPE
 const updateRecipe = async (req, res) => {
   const {
-    body: { recipe, indredients },
+    body: { recipe, ingredients },
     user: { userId },
     params: { id: recipeId },
   } = req;
@@ -52,7 +52,7 @@ const updateRecipe = async (req, res) => {
     throw new BadRequestError(`Invalid recipe ID: ${recipeId}`);
   }
 
-  if (recipe === "" || ingredients === "") {
+  if (!recipe || recipe.trim() === "" || !ingredients || ingredients.trim() === "") {
     throw new BadRequestError("Recipe or Ingredients fields cannot be empty");
   }
   const updatedRecipe = await Recipe.findByIdAndUpdate(

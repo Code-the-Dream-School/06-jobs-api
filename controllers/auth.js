@@ -6,7 +6,8 @@ const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   try {
-    const user = await User.create({ ...req.body });
+    const email = req.body.email.toLowerCase().trim()
+    const user = await User.create({ ...req.body, email });
     const token = user.createJWT();
     console.log("JWT_SECRET is:", process.env.JWT_SECRET);
     res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token });
@@ -18,13 +19,18 @@ const register = async (req, res) => {
   }
 };
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  let { email, password } = req.body;
   if (!email || !password) {
-    console.log("Email or password missing:", { email, password });
-    throw new BadRequestError("Please provide email and password");
+    console.log('Missing credentials:', {
+      email: !!email,
+      password: !!password
+    })
+    return res.status(400).json({message:"Email and password are required."})
   }
+
+  email = email.toLowerCase().trim()
+
   const user = await User.findOne({ email });
- 
   if (!user) {
     throw new UnauthenticatedError("Invalid Credentials");
   }

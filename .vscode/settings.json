@@ -1,0 +1,8 @@
+{
+    "typescript.validate.enable": true,
+    "files.exclude": {
+      "**/node_modules": true
+    },
+    "typescript.disableAutomaticTypeAcquisition": true
+  }
+  

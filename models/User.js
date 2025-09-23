@@ -1,8 +1,8 @@
 // models/User.js
 
 const mongoose = require("mongoose");
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -15,11 +15,10 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "Please provide email"],
-    match: [
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      "Please provide valid email",
-    ],
-    unique: true,
+    unique: true, // ensures emails are stored in lowercase
+    trim: true, // removes whitespace
+    lowercase: true,
+    match: [/\S+@\S+\.\S+/, "is invalid"],
   },
 
   password: {
@@ -29,22 +28,24 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-UserSchema.pre('save', async function(next) {
+// Hash password before saving
+UserSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt)
-})
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
+// Create JWT
 UserSchema.methods.createJWT = function () {
   return jwt.sign(
-    {userId: this._id, name:this.name },
-     process.env.JWT_SECRET, 
-     {expiresIn: process.env.JWT_LIFETIME}
-  )
-}
+    { userId: this._id, name: this.name },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_LIFETIME }
+  );
+};
 
+// Compare passwords
 UserSchema.methods.comparePassword = async function (candidatePassword) {
-  const isMatch = await bcrypt.compare(candidatePassword, this.password)
-  return isMatch
-}
+  return bcrypt.compare(candidatePassword, this.password);
+};
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = mongoose.model("User", UserSchema);

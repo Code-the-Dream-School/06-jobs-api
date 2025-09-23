@@ -12,11 +12,22 @@ const RecipeSchema = new mongoose.Schema(
       required: [true, "Please provide ingredients"],
       maxlength: 500,
     },
-    status: {
+    method: {
       type: String,
-      enum: ["interview", "declined", "pending"],
-      default: "pending",
     },
+difficulty: {
+  type: String,
+  enum: ["Easy", "Medium", "Hard"],
+  default: "Medium"
+},
+prepTime: {
+  type: Number,
+  min: 0,
+},
+isVegetarian: {
+  type: Boolean,
+  default: false,
+},
     createdBy: {
       type: mongoose.Types.ObjectId,
       ref: "User",
