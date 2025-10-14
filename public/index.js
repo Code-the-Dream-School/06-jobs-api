@@ -9,12 +9,14 @@ export const setDiv = (newDiv) => {
   }
 };
 
+//input control
 let _inputEnabled = true;
 export const getInputEnabled = () => _inputEnabled;
 export const setInputEnabled = (state) => {
-  inputEnabled = state;
+  _inputEnabled = state;
 };
 
+// token mgmt
 export let _token = null;
 export const getToken = () => _token;
 export const setToken = (value) => {
@@ -26,23 +28,31 @@ export const setToken = (value) => {
   }
 };
 
-export let message = null;
 
+// msg element
+let _message = null;
+export const getMessage = () => _message
+export const setMessage = (msgE1) => {
+  _message = msgE1;
+}
+
+// imports 
 import { showRecipes, handleRecipes } from "./recipes.js";
 import { showLoginRegister, handleLoginRegister } from "./loginRegister.js";
 import { handleLogin } from "./login.js";
 import { handleAddEdit } from "./addEdit.js";
 import { handleRegister } from "./register.js";
 
+// initialize
 document.addEventListener("DOMContentLoaded", () => {
-  token = localStorage.getItem("token");
-  message = document.getElementById("message");
+  setToken = localStorage.getItem("token");
+  setMessage(document.getElementById("message"));
   handleLoginRegister();
   handleLogin();
   handleRecipes();
   handleRegister();
   handleAddEdit();
-  if (token) {
+  if (getToken) {
     showRecipes();
   } else {
     showLoginRegister();

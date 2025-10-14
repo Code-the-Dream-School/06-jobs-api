@@ -1,4 +1,4 @@
-import { enableInput, inputEnabled, message, setDiv, token } from "./index.js";
+import { setInputEnabled, getInputEnabled, message, setDiv, getToken } from "./index.js";
 import { showRecipes } from "./recipes.js";
 
 let addEditDiv = null;
@@ -26,7 +26,7 @@ export const handleAddEdit = () => {
 
         const difficulty = document.getElementById("difficulty").value;
         const prepTime = parseInt(document.getElementById("prepTime").value);
-        const isVegetarian = document.getElementById("isVegetarian").ariaChecked;
+        const isVegetarian = document.getElementById("isVegetarian").Checked;
 
         const url = currentRecipeId
           ? `/api/v1/recipes/${currentRecipeId}`
@@ -38,12 +38,12 @@ export const handleAddEdit = () => {
             method,
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${getToken}`,
             },
 
            
             body: JSON.stringify({
-              recipe: recipe.value,
+              recipe: recipeInput.value,
               ingredients: ingredients.value,
               method: methodElem.value,
               difficulty: document.getElementById("difficulty").value,
@@ -97,7 +97,7 @@ export const showAddEdit = async (recipeId) => {
       const response = await fetch(`/api/v1/recipes/${recipeId}`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${getToken}`,
         },
       });
 
