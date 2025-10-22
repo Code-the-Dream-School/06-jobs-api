@@ -2,11 +2,17 @@
 
 require("dotenv").config();
 require("express-async-errors");
+
 const express = require("express");
 const app = express();
-const mongoose = require("mongoose");
-const testAuth = require('./middleware/authentication');
-console.log(testAuth);
+const path = require("path");
+
+const recipesRouter = require("./routes/recipesRoute.js");
+const authRouter = require("./routes/authRoute");
+
+// error handler
+const notFoundMiddleware = require("./middleware/not-found");
+const errorHandlerMiddleware = require("./middleware/error-handler");
 
 // extra security packages
 const helmet = require("helmet");
@@ -18,16 +24,11 @@ const rateLimit = require("express-rate-limit");
 const connectDB = require("./db/connect");
 const authenticateUser = require("./middleware/authentication");
 
-// routers
-const authRouter = require("./routes/auth");
-const recipesRouter = require("./routes/recipes");
-
-// error handler
-const notFoundMiddleware = require("./middleware/not-found");
-const errorHandlerMiddleware = require("./middleware/error-handler");
+// Setup EJS
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 // extra packages
-
 app.set("trust proxy", 1);
 app.use(
   rateLimit({
@@ -41,17 +42,14 @@ app.use(cors());
 app.use(xss());
 
 // routes
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/recipes", authenticateUser, recipesRouter);
-// app.get("/", (req,res) => {
-  // res.status(200).json({ msg: 'API is running'})
-// })
-
-app.use(express.static("public"))
-
-app.use(notFoundMiddleware);
-app.use(errorHandlerMiddleware);
 app.use(express.static("public"));
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/recipes", recipesRouter);
+
+// debug
+app.get("/api/v1/debug", (req, res) => {
+  res.json({ msg: "This debug route works" });
+});
 
 const port = process.env.PORT || 3000;
 const start = async () => {

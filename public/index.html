@@ -1,68 +1,101 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Recipe App</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <form id="login-form" id="username" />
-  <input type="password" id="password" />
-  <button type="submit">Login</button>
-</form>
-  <div id="message"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Recipe App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="login-register-div">
+      <button id="show-login">Already have an account?</button>
+      <button id="show-register">Need to register?</button>
 
-  <div id="recipes">
-    <button id="add-recipe">Add Recipe</button>
-    <button id="logoff">Log Off</button>
-    <table id="recipes-table">
-      <thead id="recipes-table-header">
-        <tr>
-          <th>Name</th>
-          <th>Ingredients</th>
-          <th>Method</th>
-          <th>Difficulty</th>
-          <th>Prep Time</th>
-          <th>Vegetarian</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+      <!-- Login form -->
+      <form id="login-form">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
 
-  <div id="edit-recipe">
-    <h2 id="form-title">Add/Edit Recipe</h2>
-    <p id="message"></p>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+      
+        <div id="login-message"></div>
+        <button type="submit">Login</button>
+      </form>
 
-    <label for="recipe">Recipe Name:</label>
-    <input type="text" id="recipe" />
+      <!-- Register form -->
+      <form id="register-form" style="display: none">
+        <label for="register-email">Email:</label>
+        <input type="email" id="register-email" name="register-email" required />
 
-    <label for="ingredients">Ingredients:</label>
-    <textarea id="ingredients"></textarea>
+        <label for="register-password">Password:</label>
+        <input type="password" id="register-password" required />
 
-    <label for="method">Method:</label>
-    <textarea id="method"></textarea>
+        <label for="register-password2">Confirm Password:</label>
+        <input type="password" id="register-password2" required />
 
-    <label for="difficulty">Difficulty:</label>
-    <select id="difficulty">
-      <option value="Easy">Easy</option>
-      <option value="Medium">Medium</option>
-      <option value="Hard">Hard</option>
-    </select>
+        <button id="register-button" type="submit">Register</button>
+        <button id="register-cancel" type="button">Cancel</button>
+      </form>
+    </div>
+
+    <!-- Recipe table -->
+    <div id="recipes-div" style="display: none">
+      <button id="add-recipe">Add Recipe</button>
+      <button id="logoff">Log Off</button>
+
+      <table id="recipes-table">
+        <thead id="recipes-table-header">
+          <tr>
+            <th>Name</th>
+            <th>Ingredients</th>
+            <th>Method</th>
+            <th>Difficulty</th>
+            <th>Prep Time</th>
+            <th>Vegetarian</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+      <tbody>
+        <!--- Recipes will be injected here -->
+      </tbody>
+      </table>
+    </div>
+
+    <!-- Add/edit recipe form -->
+    <div id="edit-recipe" style="display: none">
+      <h2 id="form-title">Add/Edit Recipe</h2>
+      <p id="form-message"></p>
+
+      <label for="recipe">Recipe Name:</label>
+      <input type="text" id="recipe" required />
+
+      <label for="ingredients">Ingredients:</label>
+      <textarea id="ingredients" required></textarea>
+
+      <label for="method">Method:</label>
+      <textarea id="method" required></textarea>
+
+      <label for="difficulty">Difficulty:</label>
+      <select id="difficulty">
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+
+      <label for="prepTime">Preparation Time (mins):</label>
+      <input type="number" id="prepTime" required />
+
+      <label>
+        <input type="checkbox" id="isVegetarian" />
+        Vegetarian
+      </label>
+
+      <button id="adding-recipe">Save</button>
+      <button id="edit-cancel">Cancel</button>
+    </div>
+    <script type="module" src="index.js"></script>
     
-    <label for="prepTime">Preparation Time (mins):</label>
-    <input type="number" id="prepTime" />
-    
-    <label>
-      <input type="checkbox" id="isVegetarian" />
-      Vegetarian
-    </label>
 
-    <button id="adding-recipe">Save</button>
-    <button id="edit-cancel">Cancel</button>
-  </div>
-  <script type="module" src="index.js"></script>
-  <script src="recipes.js" defer></script>
-</body>
+
+  </body>
 </html>

@@ -1,10 +1,10 @@
 import {
-  inputEnabled,
+  getInputEnabled,
   setDiv,
-  message,
   setToken,
-  token,
-  enableInput,
+  getToken,
+  setInputEnabled,
+  getMessage,
 } from "./index.js";
 import { showLoginRegister } from "./loginRegister.js";
 import { showAddEdit } from "./addEdit.js";
@@ -14,7 +14,7 @@ let recipesTable = null;
 let recipesTableHeader = null;
 
 export const handleRecipes = () => {
-  recipesDiv = document.getElementById("recipes");
+  recipesDiv = document.getElementById("recipes-div");
   const logoff = document.getElementById("logoff");
   const addRecipe = document.getElementById("add-recipe");
   recipesTable = document.getElementById("recipes-table");
@@ -22,14 +22,21 @@ export const handleRecipes = () => {
 
   recipesDiv.addEventListener("click", async (e) => {
     const target = e.target;
-    if (inputEnabled && target.nodeName === "BUTTON") {
+    const message = getMessage();
+
+    if (getInputEnabled() && target.nodeName === "BUTTON") {
       if (target === addRecipe) {
         showAddEdit(null);
       } else if (target === logoff) {
         setToken(null);
         message.textContent = "You have been logged off.";
-        recipesTable.replaceChildren([recipesTableHeader]);
+        const tableBody = recipesTable.querySelector("tbody")
+        if (tableBody) {
+          tableBody.innerHTML = ""
+        }
+        
         showLoginRegister();
+        document.getElementById("login-form").style.display = "block"
       } else if (target.classList.contains("edit-button")) {
         const recipeId = target.dataset.id;
         showAddEdit(recipeId);
@@ -40,7 +47,7 @@ export const handleRecipes = () => {
           const response = await fetch(`/api/v1/recipes/${recipeId}`, {
             method: "DELETE",
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${getToken()}`,
             },
           });
 
@@ -56,48 +63,77 @@ export const handleRecipes = () => {
           console.error(err);
           message.textContent = "A communication error occurred.";
         }
-        enableInput(true);
+        setInputEnabled(true);
       }
     }
   });
 };
 
 export const showRecipes = async () => {
+  recipesTable = document.getElementById("recipes-table");
+  recipesTableHeader = document.getElementById("recipes-table-header");
+
+  const recipesDiv = document.getElementById("recipes-div");
   setDiv(recipesDiv);
+  const message = getMessage();
   message.textContent = "Loading...";
 
   try {
     const response = await fetch("/api/v1/recipes", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${getToken()}`,
       },
     });
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (err) {
+      const rawText = await response.text();
+      console.error("Failed to parse JSON:", err);
+      console.error("Raw response:", rawText);
+      message.textContent = "Unexpected response from server.";
+      return;
+    }
 
     if (response.status === 200) {
       const recipes = data.recipes;
 
-      // Clear table and add header
-      recipesTable.replaceChildren([recipesTableHeader]);
-
-      if (recipes.length === 0) {
+      if (!Array.isArray(recipes) || recipes.length === 0) {
         message.textContent = "No recipes found.";
         return;
       }
+
+      // Clear table and add header
+      const tableBody = recipesTable.querySelector("tbody");
+      if (!tableBody) {
+        console.error("No <tbody> found inside #recipes-table");
+        message.textContent = "Internal error: cannot display recipes."
+        return;
+      }
+      tableBody.innerHTML = "";
 
       for (const recipe of recipes) {
         const row = document.createElement("tr");
 
         const nameCell = document.createElement("td");
-        nameCell.textContent = recipe.recipe;
+        nameCell.textContent = recipe.name;
 
         const ingredientsCell = document.createElement("td");
         ingredientsCell.textContent = recipe.ingredients;
 
         const methodCell = document.createElement("td");
         methodCell.textContent = recipe.method;
+
+        const difficultyCell = document.createElement("td");
+        difficultyCell.textContent = recipe.difficulty || "";
+
+        const prepTimeCell = document.createElement("td");
+        prepTimeCell.textContent = recipe.prepTime || "";
+
+        const vegetarianCell = document.createElement("td");
+        vegetarianCell.textContent = recipe.isVegetarian ? "Yes" : "No";
 
         const actionsCell = document.createElement("td");
 
@@ -117,13 +153,17 @@ export const showRecipes = async () => {
         row.appendChild(nameCell);
         row.appendChild(ingredientsCell);
         row.appendChild(methodCell);
+        row.appendChild(difficultyCell);
+        row.appendChild(prepTimeCell);
+        row.appendChild(vegetarianCell);
         row.appendChild(actionsCell);
 
-        recipesTable.appendChild(row);
+        tableBody.appendChild(row);
       }
 
       message.textContent = "";
     } else {
+      console.error("Error loading recipes:", data)
       message.textContent = data.msg || "Failed to load recipes.";
     }
   } catch (err) {

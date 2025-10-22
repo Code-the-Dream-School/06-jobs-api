@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const RecipeSchema = new mongoose.Schema(
   {
-    recipe: {
+    name: {
       type: String,
       required: [true, "Please provide recipe name"],
       maxlength: 50,
@@ -22,16 +22,17 @@ difficulty: {
 },
 prepTime: {
   type: Number,
-  min: 0,
+  required: [true, "Please provide preparation time"],
+  min: [1, "Preparation time must be at least 1 minute"],
 },
 isVegetarian: {
   type: Boolean,
   default: false,
 },
     createdBy: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "Please provide user"],
+      required: true,
     },
   },
   { timestamps: true }

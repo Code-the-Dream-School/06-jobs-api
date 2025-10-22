@@ -1,25 +1,28 @@
-import { inputEnabled, setDiv } from "./index.js";
+import { getInputEnabled, setDiv } from "./index.js";
 import { showLogin } from "./login.js";
 import { showRegister } from "./register.js";
 
 let loginRegisterDiv = null;
 
 export const handleLoginRegister = () => {
-  loginRegisterDiv = document.getElementById("logon-register");
-  const login = document.getElementById("logon");
-  const register = document.getElementById("register");
+  loginRegisterDiv = document.getElementById("login-register-div");
+  const loginForm = document.getElementById("login-form");
+  const registerForm = document.getElementById("register-form");
+  const showLoginBtn = document.getElementById("show-login");
+  const showRegisterBtn = document.getElementById("show-register");
 
-  loginRegisterDiv.addEventListener("click", (e) => {
-    if (inputEnabled && e.target.nodeName === "BUTTON") {
-      if (e.target === login) {
-        showLogin();
-      } else if (e.target === register) {
-        showRegister();
-      }
-    }
-  });
-};
 
+showLoginBtn.addEventListener("click", () => {
+  loginForm.style.display = "block"
+  registerForm.style.display = "none"
+})
+
+showRegisterBtn.addEventListener("click", () => {
+  loginForm.style.display = "none"
+  registerForm.style.display = "block"
+})
+}
+  
 export const showLoginRegister = () => {
   setDiv(loginRegisterDiv);
 };
