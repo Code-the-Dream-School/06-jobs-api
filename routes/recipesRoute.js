@@ -1,4 +1,4 @@
-// routes/recipes.js
+// routes/recipesRoute.js
 
 const express = require("express");
 const router = express.Router();
@@ -15,18 +15,21 @@ const auth = require("../middleware/authentication")
 
 router.use(auth);
 
-router.route("/")
-.get(getAllRecipes).
-post(createRecipe);
+router
+.route("/")
+.get(auth, getAllRecipes).
+post(auth, createRecipe);
 
 router.route("/:id")
-.get(getRecipe)
-.put(updateRecipe)
-.delete(deleteRecipe)
+
+.get(auth, getRecipe)
+.put(auth, updateRecipe)
+.delete(auth, deleteRecipe)
+
+
+module.exports = router;
 
 
 
 
 
-
-module.exports = router

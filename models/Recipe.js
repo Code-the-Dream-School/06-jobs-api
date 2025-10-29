@@ -1,41 +1,17 @@
 const mongoose = require("mongoose");
 
-const RecipeSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: [true, "Please provide recipe name"],
-      maxlength: 50,
-    },
-    ingredients: {
-      type: String,
-      required: [true, "Please provide ingredients"],
-      maxlength: 500,
-    },
-    method: {
-      type: String,
-    },
-difficulty: {
-  type: String,
-  enum: ["Easy", "Medium", "Hard"],
-  default: "Medium"
-},
-prepTime: {
-  type: Number,
-  required: [true, "Please provide preparation time"],
-  min: [1, "Preparation time must be at least 1 minute"],
-},
-isVegetarian: {
-  type: Boolean,
-  default: false,
-},
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-  },
-  { timestamps: true }
-);
+
+const RecipeSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  ingredients: { type: [String], required: true }, // <- array of strings
+  method: { type: String, required: true },
+  difficulty: { type: String, required: true },
+  prepTime: { type: Number, required: true },
+  isVegetarian: { type: Boolean, default: false },
+  createdBy: { type: mongoose.Types.ObjectId, ref: "User", required: true }
+});
+
+module.exports = mongoose.model("Recipe", RecipeSchema);
+
 
 module.exports = mongoose.model("Recipe", RecipeSchema);

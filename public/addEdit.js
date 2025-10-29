@@ -1,146 +1,136 @@
+// addEdit.js
 import {
-  setInputEnabled,
   getInputEnabled,
-  getMessage,
-  setMessage,
+  setInputEnabled,
   setDiv,
   getToken,
+  setMessage,
+  getMessage,
 } from "./index.js";
 import { showRecipes } from "./recipes.js";
 
-let addEditDiv = null;
-let recipeInput = null;
-let ingredientsInput = null;
-let methodInput = null;
-let addingRecipeBtn = null;
 let currentRecipeId = null;
 
+const recipeInput = () => document.getElementById("recipe");
+const ingredientsInput = () => document.getElementById("ingredients");
+const methodInput = () => document.getElementById("method");
+const difficultyInput = () => document.getElementById("difficulty");
+const prepTimeInput = () => document.getElementById("prepTime");
+const isVegetarianInput = () => document.getElementById("isVegetarian");
+const formDiv = () => document.getElementById("edit-recipe");
+const formTitle = () => document.getElementById("form-title");
+const addingRecipeBtn = () => document.getElementById("adding-recipe");
+const cancelBtn = () => document.getElementById("edit-cancel");
+
 export const handleAddEdit = () => {
-  addEditDiv = document.getElementById("edit-recipe");
-  recipeInput = document.getElementById("recipe");
-  ingredientsInput = document.getElementById("ingredients");
-  methodInput = document.getElementById("method");
-  addingRecipeBtn = document.getElementById("adding-recipe");
-  const editCancel = document.getElementById("edit-cancel");
-  const message = getMessage();
+  // Save button
+  addingRecipeBtn().addEventListener("click", async () => {
+    if (!getInputEnabled()) return;
+    setInputEnabled(false);
 
-  addEditDiv.addEventListener("click", async (e) => {
-    if (getInputEnabled() && e.target.nodeName === "BUTTON") {
-      if (e.target === addingRecipeBtn) {
-        setInputEnabled(false);
+    const message = getMessage();
+    message.textContent = "";
 
-        const difficulty = document.getElementById("difficulty").value;
-        const prepTime = parseInt(document.getElementById("prepTime").value);
-        const isVegetarian = document.getElementById("isVegetarian").checked;
+    const recipeData = {
+      name: recipeInput().value.trim(),
+      ingredients: ingredientsInput().value.trim(),
+      method: methodInput().value.trim(),
+      difficulty: difficultyInput().value,
+      prepTime: parseInt(prepTimeInput().value),
+      isVegetarian: isVegetarianInput().checked,
+    };
 
-        const url = currentRecipeId
-          ? `/api/v1/recipes/${currentRecipeId}`
-          : "/api/v1/recipes";
-        const method = currentRecipeId ? "PUT" : "POST";
+    const url = currentRecipeId
+      ? `/api/v1/recipes/${currentRecipeId}`
+      : "/api/v1/recipes";
 
-        try {
-          const response = await fetch(url, {
-            method,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${getToken()}`,
-            },
+    const method = currentRecipeId ? "PUT" : "POST";
 
-            body: JSON.stringify({
-              name: recipeInput.value,
-              ingredients: ingredientsInput.value,
-              method: methodInput.value,
-              difficulty,
-              prepTime,
-              isVegetarian,
-            }),
-          });
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
+        },
+        body: JSON.stringify(recipeData),
+      });
 
-          const data = await response.json();
+      const data = await res.json();
 
-          if (response.status === 200 || response.status === 201) {
-            if (message) {
-              message.textContent = currentRecipeId
-                ? "The recipe was updated."
-                : "The recipe was created.";
-            }
-
-            // Clear inputs
-            recipeInput.value = "";
-            ingredientsInput.value = "";
-            methodInput.value = "";
-            document.getElementById("difficulty").value = "Easy";
-            document.getElementById("prepTime").value = "";
-            document.getElementById("isVegetarian").checked = false;
-
-            currentRecipeId = null;
-
-            showRecipes();
-          } else {
-            message.textContent = data.msg || "An error occurred.";
-          }
-        } catch (err) {
-          console.error(err);
-          message.textContent = "A communication error occurred.";
-        }
-
-        setInputEnabled(true);
-      } else if (e.target === editCancel) {
+      if (res.ok) {
+        message.textContent = currentRecipeId
+          ? "Recipe updated successfully!"
+          : "Recipe created successfully!";
+        clearForm();
         currentRecipeId = null;
-        message.textContent = "";
         showRecipes();
+      } else {
+        message.textContent = data.msg || "Failed to save recipe.";
       }
+    } catch (err) {
+      console.error(err);
+      message.textContent = "Server communication error.";
+    } finally {
+      setInputEnabled(true);
     }
+  });
+
+  // Cancel button
+  cancelBtn().addEventListener("click", () => {
+    clearForm();
+    currentRecipeId = null;
+    showRecipes();
   });
 };
 
+// Show Add/Edit form
 export const showAddEdit = async (recipeId = null) => {
-  const formDiv = document.getElementById('edit-recipe')
-  const formTitle = document.getElementById('form-title')
-  const message = getMessage();
-
   currentRecipeId = recipeId;
-  formTitle.textContent = recipeId ? "Edit Recipe" : "Add Recipe"
- formDiv.style.display = "block"
-message.textContent = "";
+  setDiv(formDiv());
+  formTitle().textContent = recipeId ? "Edit Recipe" : "Add Recipe";
+  setMessage(getMessage()); // reset message
+  getMessage().textContent = "";
 
+  // Clear form first
+  clearForm();
 
+  if (!recipeId) return;
 
-  // Clear previous values
-  document.getElementById('recipe').value=''
-  document.getElementById('ingredients').value=''
-  document.getElementById('method').value = ''
-  document.getElementById('difficulty').value = 'Easy'
-  document.getElementById('prepTime').value = ''
-  document.getElementById('isVegetarian').checked = false;
-
-if (recipeId) {
+  // Fetch existing recipe
   try {
-    const response = await fetch(`/api/v1/recipes/${recipeId}`, {
+    const res = await fetch(`/api/v1/recipes/${recipeId}`, {
       method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${getToken()}`,
       },
     });
 
-const data = await response.json();
+    const data = await res.json();
 
-if (response.ok) {
-  document.getElementById("recipe").value = data.recipe.recipe
-  document.getElementById("ingredients").value = data.recipe.ingredients
-  document.getElementById("method").value = data.recipe.method
-  document.getElementById("difficulty").value = data.recipe.difficulty
-  document.getElementById("prepTime").value = data.recipe.prepTime
-  document.getElementById("isVegetarian").checked =data.recipe.isVegetarian
-} else {
-  message.textContent = data.msg || "Failed to load recipe."
-
-} 
+    if (res.ok) {
+      recipeInput().value = data.recipe.name;
+      ingredientsInput().value = data.recipe.ingredients;
+      methodInput().value = data.recipe.method;
+      difficultyInput().value = data.recipe.difficulty;
+      prepTimeInput().value = data.recipe.prepTime;
+      isVegetarianInput().checked = data.recipe.isVegetarian;
+    } else {
+      getMessage().textContent = data.msg || "Failed to load recipe.";
+    }
   } catch (err) {
-    console.error(err)
-    message.textContent = "A communication error occurred."
+    console.error(err);
+    getMessage().textContent = "Server communication error.";
   }
+};
 
-}
-}
+// Helper to clear the form
+const clearForm = () => {
+  recipeInput().value = "";
+  ingredientsInput().value = "";
+  methodInput().value = "";
+  difficultyInput().value = "Easy";
+  prepTimeInput().value = "";
+  isVegetarianInput().checked = false;
+};

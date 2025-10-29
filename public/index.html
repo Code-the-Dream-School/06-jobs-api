@@ -55,19 +55,19 @@
             <th>Actions</th>
           </tr>
         </thead>
-      <tbody>
-        <!--- Recipes will be injected here -->
-      </tbody>
+        <tbody>
+          <!-- Recipes will be injected here -->
+        </tbody>
       </table>
     </div>
 
     <!-- Add/edit recipe form -->
     <div id="edit-recipe" style="display: none">
       <h2 id="form-title">Add/Edit Recipe</h2>
-      <p id="form-message"></p>
+      <p id="login-message"></p> <!-- JS uses getMessage() pointing to login-message -->
 
       <label for="recipe">Recipe Name:</label>
-      <input type="text" id="recipe" required />
+      <input type="text" id="recipe" required /> <!-- changed id from 'name' to 'recipe' -->
 
       <label for="ingredients">Ingredients:</label>
       <textarea id="ingredients" required></textarea>
@@ -93,9 +93,8 @@
       <button id="adding-recipe">Save</button>
       <button id="edit-cancel">Cancel</button>
     </div>
-    <script type="module" src="index.js"></script>
-    
 
-
+    <script type="module" src="./index.js"></script>
   </body>
 </html>
+
